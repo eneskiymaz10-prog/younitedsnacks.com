@@ -1,6 +1,5 @@
 # younitedsnacks.com
 
-Static site for **You United Snacks**, hosted on GitHub Pages with the custom domain `younitedsnacks.com`.
+One-page marketing site for **YOUNITED Gourmet Snacking** (protein candy bars, cereal cups, cheese puffs, spreads). Static HTML/CSS/JS, deployed by GitHub Pages from `main` — push to deploy. No build step.
 
-- Edit `index.html` (and add pages) then push to `main`; GitHub Pages redeploys automatically.
-- `CNAME` binds the custom domain. `robots.txt` and `sitemap.xml` are for search engines.
+Design, content sources, research and deployment notes live in the private **panito** handoff folder (ask Enes Kiymaz). Do not edit `CNAME` or `.nojekyll`.
