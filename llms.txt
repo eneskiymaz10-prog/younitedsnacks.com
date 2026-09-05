@@ -1,11 +1,21 @@
 # YOUNITED Gourmet Snacking
 
-> YOUNITED is a gourmet functional snack brand: protein candy bars, protein cereal cups, real-cheese puffs and single-serve spreads with 15g protein, under 199 kcal and zero added sugar, manufactured in the EU (Latvia, Slovenia). Co-founded by Kadir Demir (misterkd.com). Target markets: Türkiye, UAE, Saudi Arabia, Germany, Netherlands, United States.
+> Gourmet taste. Real nutrition. Finally united. Protein candy bars, cereal cups, real cheese puffs and spreads that taste like a treat first. Made in Latvia and Slovenia, EU.
 
-## Key facts
-- [The range](https://younitedsnacks.com/#range): Candy bars (Hazelnut & Milk Chocolate, Peanut & Caramel, Pistachio & White Chocolate); Cereal cups (Tropical Fruit, Apple & Cinnamon, Chocolate; monk-fruit sweetened, vegan); Cheese puffs (Belgian Chocolate, Dutch-Style Smoked, Piedmont-Style Truffle, Korean-Style Kimchi); Spreads (Hazelnut & White Chocolate, Peanut & Caramel, Pistachio & White Chocolate).
-- [Nutrition](https://younitedsnacks.com/#math): 15g protein per serving, maximum 199 kcal, no added sugar, GMO-free.
-- [Partner](https://younitedsnacks.com/#partner): distributor, retailer, food-service, investor and press enquiries; reply within 48 hours.
+## Range
+- Candy bars: Hazelnut & Milk Chocolate, Peanut & Caramel, Pistachio & White Chocolate. Formulation targets: 15g protein, 4g fibre, no added sugar, at most 199 kcal per serving.
+- Cereal cups: Tropical Fruit, Apple & Cinnamon, Chocolate. Targets: 15g protein, 5g fibre. Sweetened with monk fruit.
+- Real cheese puffs: Belgian Chocolate Coated, Dutch-Style Smoked, Piedmont-Style Truffle, Korean-Style Kimchi. Target: 15g protein.
+- Gourmet spreads: Hazelnut & White Chocolate, Peanut & Caramel, Pistachio & White Chocolate. Up to 9g protein, no added sugar.
+Nutrition figures are formulation targets varying by product and market.
 
-## Optional
-- [Founder profile](https://misterkd.com/): Kadir Demir, product architect.
+## People
+Co-founder Kadir Demir leads product design and development: https://misterkd.com/
+
+## Partnership
+YOUNITED works with specialist producers in Latvia and Slovenia; product development, brand and distribution stay in-house. The range is being developed for retailers and distributors across markets.
+Distributor, retailer, food service, investor, press and consumer enquiries. Delivery is not configured in this local redesign. Visitors may download a local brief; no enquiry is sent.
+
+## Pages
+- https://younitedsnacks.com/
+- https://misterkd.com/
