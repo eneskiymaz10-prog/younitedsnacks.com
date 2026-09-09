@@ -39,12 +39,12 @@
       gsap.to(layer, { y: [55, -45, -70][index], rotation: [3, -3, 2][index], ease: 'none',
         scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: .8 } });
     });
-    gsap.from('.intro h2', { x: -35, duration: .9, ease: 'power3.out', clearProps: 'transform',
+    gsap.from('.intro h2', { x: -18, duration: .9, ease: 'power3.out', clearProps: 'transform',
       scrollTrigger: { trigger: '.intro', start: 'top 75%', once: true } });
     gsap.fromTo('.feature__pack', { y: 45, rotation: -17 }, { y: -35, rotation: -7, ease: 'none',
       scrollTrigger: { trigger: '.feature', start: 'top bottom', end: 'bottom top', scrub: .8 } });
-    gsap.from('.production-line__route', { scaleX: 0, duration: 1.15, ease: 'power3.inOut', clearProps: 'transform',
-      scrollTrigger: { trigger: '.production-line', start: 'top 80%', once: true } });
+    gsap.from('.story__photo', { y: 32, duration: 1.1, ease: 'power3.out', clearProps: 'transform',
+      scrollTrigger: { trigger: '.story__photo', start: 'top 85%', once: true } });
     return () => layers.forEach(layer => layer.replaceWith(...layer.childNodes));
   });
 
