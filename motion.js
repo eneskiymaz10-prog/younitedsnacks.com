@@ -48,7 +48,7 @@
     return () => layers.forEach(layer => layer.replaceWith(...layer.childNodes));
   });
 
-  media.add('(min-width: 1001px) and (min-height: 740px) and (prefers-reduced-motion: no-preference)', () => {
+  media.add('(min-width: 1001px) and (min-height: 640px) and (prefers-reduced-motion: no-preference)', () => {
     const experience = range.querySelector('.range-experience');
     const track = range.querySelector('.range-panels');
     const tabs = [...range.querySelectorAll('[data-show-family]')];
