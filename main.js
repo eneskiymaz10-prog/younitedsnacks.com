@@ -9,12 +9,19 @@ burger.addEventListener('click',()=>{const open=burger.getAttribute('aria-expand
 $$('a',links).forEach(a=>a.addEventListener('click',()=>closeMenu()));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('is-open'))closeMenu(true);if(e.key==='Tab'&&nav.classList.contains('is-open')){const stops=[...$$('a',links),burger];const first=stops[0],last=stops[stops.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 matchMedia('(max-width:820px)').addEventListener('change',()=>closeMenu());
-const families=$$('[data-family]'),tabs=$$('[data-show-family]');
-function selectFamily(id){families.forEach(panel=>{panel.hidden=panel.dataset.family!==id;});tabs.forEach(tab=>{const active=tab.dataset.showFamily===id;tab.classList.toggle('is-active',active);tab.setAttribute('aria-pressed',String(active));});}
+const range=$('#range'),families=$$('[data-family]'),tabs=$$('[data-show-family]');
+function markFamily(id){tabs.forEach(tab=>{const active=tab.dataset.showFamily===id;tab.classList.toggle('is-active',active);tab.setAttribute('aria-pressed',String(active));});}
+function selectFamily(id){
+if(range.classList.contains('range-cinematic')){range.dispatchEvent(new CustomEvent('range:select',{detail:{id}}));return;}
+families.forEach(panel=>{panel.hidden=panel.dataset.family!==id;});markFamily(id);
+range.dispatchEvent(new CustomEvent('range:change',{detail:{id}}));
+}
+range.addEventListener('range:active',e=>markFamily(e.detail.id));
+range.addEventListener('range:layout',e=>{if(e.detail.cinematic)families.forEach(panel=>panel.hidden=false);else selectFamily(tabs.find(tab=>tab.classList.contains('is-active'))?.dataset.showFamily||'bars');});
 tabs.forEach(tab=>tab.addEventListener('click',()=>selectFamily(tab.dataset.showFamily)));
 function selectProduct(panel,index){const photos=$$('.product-photo',panel);if(!photos[index])return;photos.forEach((photo,i)=>photo.classList.toggle('is-selected',i===index));$$('.flavour',panel).forEach((b,i)=>{b.classList.toggle('is-active',i===index);b.setAttribute('aria-pressed',String(i===index));});$('.product-caption',panel).textContent=$$('.flavour',panel)[index].textContent;}
 families.forEach(panel=>$$('.flavour',panel).forEach(button=>button.addEventListener('click',()=>selectProduct(panel,Number(button.dataset.product)))));
-$$('[data-select-family]').forEach(a=>a.addEventListener('click',()=>{selectFamily(a.dataset.selectFamily);const panel=families.find(f=>f.dataset.family===a.dataset.selectFamily);selectProduct(panel,Number(a.dataset.selectProduct||0));}));
+$$('[data-select-family]').forEach(a=>a.addEventListener('click',e=>{if(range.classList.contains('range-cinematic'))e.preventDefault();selectFamily(a.dataset.selectFamily);const panel=families.find(f=>f.dataset.family===a.dataset.selectFamily);selectProduct(panel,Number(a.dataset.selectProduct||0));}));
 selectFamily('bars');
 $$('[data-intent]').forEach(a=>a.addEventListener('click',()=>{const choice=$$('input[name="intent"]').find(input=>input.value===a.dataset.intent);if(choice)choice.checked=true;}));
 const form=$('#contact'),status=$('.form__status',form),key=$('input[name="access_key"]',form);
