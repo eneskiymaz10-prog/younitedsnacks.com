@@ -153,9 +153,17 @@
     const mark = () => {
       const max = row.scrollWidth - row.clientWidth;
       const x = p => p.offsetLeft - row.offsetLeft - row.scrollLeft; // a pill's left edge inside the visible row
-      const first = $$('.pill', row).find(p => x(p) >= 4);
-      const ring = first && first === document.activeElement ? 8 : 1; // keep a focused pill's ring clear of the fade
-      row.style.setProperty('--fade', (max > 2 && row.scrollLeft > 2 && first ? Math.max(12, x(first) - ring) : 1) + 'px');
+      const pills = $$('.pill', row);
+      const first = pills.find(p => x(p) >= 4);
+      const prev = first ? pills[pills.indexOf(first) - 1] : null;
+      // keep a keyboard focus ring (3px outline + 3px offset) clear of the fade
+      const ring = first && first === document.activeElement && first.matches(':focus-visible') ? 7 : 1;
+      const on = max > 2 && row.scrollLeft > 2 && first;
+      const fade = on ? Math.max(12, x(first) - ring) : 1;
+      // fully transparent up to the cut pill's right edge, so not even its rounded end (a stray ")") shows
+      const clear = on && prev ? Math.min(fade, Math.max(fade - 6, x(prev) + prev.offsetWidth + 0.5)) : fade - 6;
+      row.style.setProperty('--fade', fade + 'px');
+      row.style.setProperty('--fade-0', clear + 'px');
       row.style.setProperty('--fade-r', (max > 2 && row.scrollLeft >= max - 2 ? 1 : 28) + 'px');
     };
     row.addEventListener('scroll', mark, { passive: true });
