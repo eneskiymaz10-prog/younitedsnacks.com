@@ -12,3 +12,4 @@ These were made straight in this repo. Port them to `tools/younited/` before reg
 - **Privacy:** new `privacy.html` (its own CSP, no inline styles), linked from the form and the footer.
 - `styles.css` / `main.js` cache-busting hashes updated in `index.html`, `404.html` and `privacy.html`.
 - **Analytics:** Cloudflare Web Analytics beacon (cookieless) before `</body>` in `index.html`, `privacy.html` and `404.html`. Each page's CSP allows `https://static.cloudflareinsights.com` (script) and `https://cloudflareinsights.com` (connect); the privacy notice says so.
+- **Structured data:** the four `Product` nodes were removed from the JSON-LD graph. Google flagged them as invalid Product snippets (no `offers`, `review` or `aggregateRating`, and B2B pricing is on request), so only Organization, Person and WebSite remain.
