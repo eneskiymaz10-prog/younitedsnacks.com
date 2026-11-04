@@ -417,12 +417,13 @@
   const form = $('#contact');
   const submit = $('.form__submit', form);
   const status = $('.form__status', form);
-  const key = form.elements.access_key.value.trim();
-  const configured = key !== '' && key !== 'WEB3FORMS_ACCESS_KEY';
+  // Online sending: FormSubmit (AJAX endpoint in data-endpoint). Without one, the enquiry goes out by email.
+  const endpoint = (form.dataset.endpoint || '').trim();
+  const configured = endpoint !== '';
   submit.disabled = false;
   const hint = $('[data-form-hint]', form);
   if (configured && hint) hint.hidden = true;
-  // Email fallback: used until the Web3Forms key is in, and whenever online sending fails.
+  // Email fallback: used when no endpoint is set, before FormSubmit is activated, and whenever a send fails.
   const inbox = (form.dataset.fallbackEmail || '').trim();
   const fallback = $('.form__fallback', form);
   const fallbackLink = $('[data-fallback-mailto]', form);
@@ -497,15 +498,25 @@
     const payload = {};
     data.forEach((v, k) => { if (k !== 'families') payload[k] = v; });
     payload.families = fams.join(', ');
+    payload._replyto = data.get('email');
+    payload._captcha = 'false';
     submit.disabled = true;
     if (fallback) fallback.hidden = true;
     status.textContent = 'Sending your enquiry…';
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
+      const res = await fetch(endpoint, {
         method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload),
       });
       const out = await res.json().catch(() => ({}));
-      if (!res.ok || !out.success) throw new Error('failed');
+      const sent = res.ok && String(out.success) === 'true';
+      if (!sent && /activat/i.test(String(out.message || ''))) {
+        // The inbox has not confirmed FormSubmit yet: hand the enquiry over by email instead, without an error.
+        offerEmail(data, fams);
+        status.textContent = 'One more step: tap “Email kadir@biteandmore.com” below to send your enquiry from your email app.';
+        status.classList.add('is-ok');
+        return;
+      }
+      if (!sent) throw new Error('failed');
       status.textContent = 'Thank you. Your enquiry has been sent.';
       status.classList.add('is-ok');
       form.reset(); tried = false;

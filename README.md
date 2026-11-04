@@ -8,7 +8,7 @@ One-page marketing site for **YOUNITED Gourmet Snacking** (protein candy bars, c
 
 These were made straight in this repo. Port them to `tools/younited/` before regenerating, or a rebuild will undo them:
 
-- **Enquiry form:** the "enquiries aren't connected yet" notice is gone. The form sends through Web3Forms once a real `access_key` is in it; until then (and whenever sending fails) it opens a pre-filled email to the address in the form's `data-fallback-email`, with a "Copy my enquiry" button. New styles are appended at the end of `styles.css`.
+- **Enquiry form:** the "enquiries aren't connected yet" notice is gone. The form sends through FormSubmit (AJAX endpoint in the form's `data-endpoint`, hidden `_subject` / `_template`; CSP `connect-src` allows `https://formsubmit.co`). Until kadir@biteandmore.com has clicked FormSubmit's "Activate Form" email, and whenever a send fails, it hands the enquiry over by email (`data-fallback-email`) with a "Copy my enquiry" button. New styles are appended at the end of `styles.css`.
 - **Privacy:** new `privacy.html` (its own CSP, no inline styles), linked from the form and the footer.
 - `styles.css` / `main.js` cache-busting hashes updated in `index.html`, `404.html` and `privacy.html`.
 - **Analytics:** Cloudflare Web Analytics beacon (cookieless) before `</body>` in `index.html`, `privacy.html` and `404.html`. Each page's CSP allows `https://static.cloudflareinsights.com` (script) and `https://cloudflareinsights.com` (connect); the privacy notice says so.
