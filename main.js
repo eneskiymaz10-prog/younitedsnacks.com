@@ -420,11 +420,42 @@
   const key = form.elements.access_key.value.trim();
   const configured = key !== '' && key !== 'WEB3FORMS_ACCESS_KEY';
   submit.disabled = false;
-  if (configured) {
-    $('#form-notice').hidden = true;
-    form.removeAttribute('aria-describedby');
-    $('.form__submit-label', form).textContent = 'Send my enquiry';
+  const hint = $('[data-form-hint]', form);
+  if (configured && hint) hint.hidden = true;
+  // Email fallback: used until the Web3Forms key is in, and whenever online sending fails.
+  const inbox = (form.dataset.fallbackEmail || '').trim();
+  const fallback = $('.form__fallback', form);
+  const fallbackLink = $('[data-fallback-mailto]', form);
+  const copyBtn = $('[data-copy-brief]', form);
+  let lastBrief = '';
+  const briefText = (data, fams) => ['YOUNITED — Enquiry', '',
+    'I’m here as a: ' + (data.get('intent') || ''),
+    'Name: ' + (data.get('name') || ''),
+    'Email: ' + (data.get('email') || ''),
+    'Company: ' + (data.get('company') || '—'),
+    'Country / market: ' + (data.get('country') || '—'),
+    'Families: ' + (fams.length ? fams.join(', ') : '—'),
+    '', 'Message:', String(data.get('message') || ''), '',
+    'Sent from younitedsnacks.com'].join('\n');
+  const mailtoFor = (data, fams) => {
+    let body = briefText(data, fams);
+    if (body.length > 1800) body = body.slice(0, 1800) + '…\n\n(Shortened: please paste the rest of your message here.)';
+    return 'mailto:' + inbox + '?subject=' + encodeURIComponent('YOUNITED enquiry: ' + (data.get('intent') || '')) + '&body=' + encodeURIComponent(body);
+  };
+  function offerEmail(data, fams) {
+    if (!inbox || !fallback) return;
+    lastBrief = briefText(data, fams);
+    fallbackLink.href = mailtoFor(data, fams);
+    if (!(navigator.clipboard && window.isSecureContext)) copyBtn.hidden = true;
+    fallback.hidden = false;
   }
+  if (copyBtn) copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(lastBrief);
+      copyBtn.textContent = 'Copied';
+      setTimeout(() => { copyBtn.textContent = 'Copy my enquiry'; }, 2200);
+    } catch (err) { copyBtn.hidden = true; }
+  });
   const checks = [
     ['f-name', 'e-name'], ['f-email', 'e-email'], ['f-msg', 'e-msg'], ['f-consent', 'e-consent'],
   ].map(([f, e]) => ({ field: $('#' + f), error: $('#' + e) }));
@@ -457,28 +488,17 @@
     const data = new FormData(form);
     const fams = data.getAll('families');
     if (!configured) {
-      const lines = ['YOUNITED — Enquiry brief', '',
-        'I’m here as a: ' + (data.get('intent') || ''),
-        'Name: ' + (data.get('name') || ''),
-        'Email: ' + (data.get('email') || ''),
-        'Company: ' + (data.get('company') || ''),
-        'Country / market: ' + (data.get('country') || ''),
-        'Families: ' + (fams.length ? fams.join(', ') : '—'),
-        '', 'Message:', String(data.get('message') || ''), '',
-        'Saved locally. This enquiry has not been sent.'];
-      const url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }));
-      const link = document.createElement('a');
-      link.href = url; link.download = 'younited-enquiry-brief.txt';
-      document.body.append(link); link.click(); link.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1500);
-      status.textContent = 'Your brief has been downloaded. Nothing has been sent; keep it to share when enquiries open.';
+      offerEmail(data, fams);
+      status.textContent = 'Your email app should now open with your enquiry. Nothing opened? Copy it and email ' + inbox + '.';
       status.classList.add('is-ok');
+      location.href = mailtoFor(data, fams);
       return;
     }
     const payload = {};
     data.forEach((v, k) => { if (k !== 'families') payload[k] = v; });
     payload.families = fams.join(', ');
     submit.disabled = true;
+    if (fallback) fallback.hidden = true;
     status.textContent = 'Sending your enquiry…';
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
@@ -490,8 +510,9 @@
       status.classList.add('is-ok');
       form.reset(); tried = false;
     } catch (err) {
-      status.textContent = 'Your enquiry could not be sent. Please try again; your details are still here.';
+      status.textContent = 'Your enquiry could not be sent. Your details are still here: try again, or email it to us instead.';
       status.classList.add('is-error');
+      offerEmail(data, fams);
     } finally {
       submit.disabled = false;
     }
