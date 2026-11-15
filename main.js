@@ -512,7 +512,7 @@
       if (!sent && /activat/i.test(String(out.message || ''))) {
         // The inbox has not confirmed FormSubmit yet: hand the enquiry over by email instead, without an error.
         offerEmail(data, fams);
-        status.textContent = 'One more step: tap “Email kadir@biteandmore.com” below to send your enquiry from your email app.';
+        status.textContent = 'One more step: tap “Email ' + inbox + '” below to send your enquiry from your email app.';
         status.classList.add('is-ok');
         return;
       }
